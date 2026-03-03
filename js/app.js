@@ -1,10 +1,10 @@
 // Main App Initialization and Global Functions
 
 // Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   initTheme();
   initEventListeners();
-  showCoursesPage();
+  //INTEGRATION: Removed showCoursesPage() to ensure the login screen is the first thing the user sees
 });
 
 // Initialize event listeners
@@ -16,7 +16,7 @@ function initEventListeners() {
   }
 
   // Keyboard shortcuts
-  document.addEventListener('keydown', function(event) {
+  document.addEventListener('keydown', function (event) {
     // Escape key to close forms
     if (event.key === 'Escape') {
       closeAllForms();
@@ -72,7 +72,7 @@ function exportCoursesToJSON() {
     assessments: dataStore.assessments,
     exportedAt: new Date().toISOString(),
   };
-  
+
   const dataStr = JSON.stringify(data, null, 2);
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
   const url = URL.createObjectURL(dataBlob);
@@ -165,7 +165,7 @@ function searchAssessments(courseId, query) {
   }
 
   hide('emptyAssessments');
-  assessmentsList.innerHTML = filtered.map(assessment => 
+  assessmentsList.innerHTML = filtered.map(assessment =>
     createAssessmentItem(courseId, assessment)
   ).join('');
 }
@@ -190,7 +190,7 @@ function filterAssessmentsByType(courseId, type) {
 
   hide('emptyAssessments');
   const sorted = [...filtered].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  assessmentsList.innerHTML = sorted.map(assessment => 
+  assessmentsList.innerHTML = sorted.map(assessment =>
     createAssessmentItem(courseId, assessment)
   ).join('');
 }
@@ -215,7 +215,7 @@ function filterAssessmentsByStatus(courseId, status) {
 
   hide('emptyAssessments');
   const sorted = [...filtered].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  assessmentsList.innerHTML = sorted.map(assessment => 
+  assessmentsList.innerHTML = sorted.map(assessment =>
     createAssessmentItem(courseId, assessment)
   ).join('');
 }
@@ -303,7 +303,7 @@ window.addEventListener('resize', handleResponsive);
 handleResponsive();
 
 // Global error handler
-window.addEventListener('error', function(e) {
+window.addEventListener('error', function (e) {
   console.error('Global error:', e);
   showNotification('An unexpected error occurred. Please try again.', 'error');
 });

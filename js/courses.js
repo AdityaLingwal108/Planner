@@ -2,6 +2,8 @@
 
 function showCoursesPage(event = null) {
   if (event) event.preventDefault();
+  //INTEGRATION: Hide other views before showing courses to prevent overlap
+  if (typeof hideAllPages === 'function') hideAllPages();
   showPage('coursesPage');
   renderCourses();
 }
@@ -25,7 +27,7 @@ function toggleEditCourseForm() {
 
 function handleCreateCourse(event) {
   event.preventDefault();
-  
+
   const formData = {
     code: document.getElementById('courseCode').value.trim(),
     name: document.getElementById('courseName').value.trim(),
@@ -36,7 +38,7 @@ function handleCreateCourse(event) {
   };
 
   const errors = validateCourseForm(formData);
-  
+
   if (Object.keys(errors).length > 0) {
     displayFormErrors('createCourseForm', errors);
     return;
@@ -49,22 +51,22 @@ function handleCreateCourse(event) {
   }
 
   const newCourse = dataStore.addCourse(formData);
-  
+
   // Reset form
   document.getElementById('createCourseForm').reset();
   clearFormErrors('createCourseForm');
   toggleCreateCourseForm();
-  
+
   // Re-render courses
   renderCourses();
-  
+
   // Show success message
   showNotification('Course added successfully!', 'success');
 }
 
 function handleEditCourse(event) {
   event.preventDefault();
-  
+
   const courseId = dataStore.currentCourseId;
   const formData = {
     code: document.getElementById('editCourseCode').value.trim(),
@@ -74,20 +76,20 @@ function handleEditCourse(event) {
   };
 
   const errors = validateCourseForm(formData);
-  
+
   if (Object.keys(errors).length > 0) {
     displayFormErrors('editCourseForm', errors);
     return;
   }
 
   dataStore.updateCourse(courseId, formData);
-  
+
   clearFormErrors('editCourseForm');
   toggleEditCourseForm();
-  
+
   // Re-render course details
   renderCourseDetails(courseId);
-  
+
   showNotification('Course updated successfully!', 'success');
 }
 
@@ -98,7 +100,7 @@ function handleDeleteCourse() {
 
   const courseId = dataStore.currentCourseId;
   dataStore.deleteCourse(courseId);
-  
+
   showNotification('Course deleted successfully!', 'success');
   setTimeout(() => {
     showCoursesPage();
@@ -167,6 +169,8 @@ function createCourseCard(course) {
 
 function viewCourseDetails(courseId) {
   dataStore.currentCourseId = courseId;
+  // PERSON 1 INTEGRATION: Hide other views before showing course details to prevent overlap
+  if (typeof hideAllPages === 'function') hideAllPages();
   showPage('courseDetailsPage');
   renderCourseDetails(courseId);
 }
@@ -180,7 +184,7 @@ function editCourse(courseId) {
   document.getElementById('editCourseName').value = course.name;
   document.getElementById('editInstructor').value = course.instructor;
   document.getElementById('editDescription').value = course.description || '';
-  
+
   toggleEditCourseForm();
 }
 
