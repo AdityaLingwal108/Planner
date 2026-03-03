@@ -47,7 +47,7 @@ body.dark-mode .auth-header p {
     color: var(--dark-text);
 }
 
-/* Styling for the toggle link (e.g., "Don't have an account?") */
+/*Styling for the toggle link*/
 .auth-switch {
     text-align: center;
     margin-top: 1.5rem;
