@@ -1,0 +1,104 @@
+/* ==========================================================================
+   AUTHENTICATION STYLES
+   Specific formatting for the Login and Register views.
+   ========================================================================== */
+
+/* Centers the auth card vertically and horizontally */
+.auth-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+}
+
+/* Restricts the width of the form container */
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 0;
+    padding: 2.5rem 2rem;
+}
+
+/* Typography for the auth headers */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-dark);
+}
+
+/* Dark mode text overrides */
+body.dark-mode .auth-header h2 {
+    color: var(--primary-color);
+}
+
+.auth-header p {
+    color: var(--light-text);
+    opacity: 0.8;
+    margin: 0;
+}
+
+body.dark-mode .auth-header p {
+    color: var(--dark-text);
+}
+
+/*Styling for the toggle link*/
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+/* Fix login page scrolling */
+#loginView {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    overflow: hidden !important;
+}
+
+#loginView .auth-wrapper {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden !important;
+}
+
+#loginView .auth-card {
+    margin: 0 auto;
+    max-height: 90vh;
+    overflow-y: auto; 
+}
+
+/* Make sure other pages scroll normally */
+#registerView,
+#dashboardPage,
+#coursesPage,
+#courseDetailsPage {
+    position: relative;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* Adjust main content */
+.main-content {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Ensure body doesn't interfere */
+body {
+    overflow: hidden;
+    height: 100vh;
+}
