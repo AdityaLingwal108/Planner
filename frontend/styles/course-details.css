@@ -1,0 +1,335 @@
+/* Course Details Page Styles */
+
+.assessments-section {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin-top: 2rem;
+}
+
+body.dark-mode .assessments-section {
+  background-color: var(--dark-card);
+}
+
+.assessments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.assessments-header h2 {
+  margin: 0;
+}
+
+.assessments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Assessment Item */
+.assessment-item {
+  background: #f9f9f9;
+  border-left: 4px solid var(--primary-color);
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .assessment-item {
+  background-color: #2a2a2a;
+  border-left-color: #3498db;
+}
+
+.assessment-item:hover {
+  box-shadow: var(--shadow);
+  transform: translateX(4px);
+}
+
+.assessment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.assessment-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.assessment-icon {
+  font-size: 1.5rem;
+  min-width: 30px;
+}
+
+.assessment-title h4 {
+  margin: 0 0 0.25rem 0;
+}
+
+.assessment-type {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+body.dark-mode .assessment-type {
+  color: #95a5a6;
+}
+
+.assessment-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.assessment-description {
+  margin: 0.75rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+body.dark-mode .assessment-description {
+  color: #ccc;
+}
+
+.assessment-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+body.dark-mode .assessment-details {
+  border-color: var(--dark-border);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+body.dark-mode .detail-label {
+  color: #95a5a6;
+}
+
+.detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.days-left {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.days-left.urgent {
+  color: var(--warning-color);
+}
+
+.days-left.overdue {
+  color: var(--danger-color);
+}
+
+.status-select {
+  padding: 0.5rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  background-color: white;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .status-select {
+  background-color: #1f1f1f;
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Marks Section */
+.marks-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+body.dark-mode .marks-section {
+  border-color: var(--dark-border);
+}
+
+@media (max-width: 768px) {
+  .marks-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.marks-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.marks-input label {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+body.dark-mode .marks-input label {
+  color: #95a5a6;
+}
+
+.marks-input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.marks-input-field {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .marks-input-field {
+  background-color: #1f1f1f;
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+}
+
+.marks-input-field:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.marks-total {
+  color: #7f8c8d;
+  font-weight: 500;
+  min-width: 50px;
+}
+
+body.dark-mode .marks-total {
+  color: #95a5a6;
+}
+
+.marks-display {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.percentage-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.grade-info p {
+  margin: 0;
+}
+
+.grade-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.grade-scale {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+body.dark-mode .grade-scale {
+  color: #95a5a6;
+}
+
+.no-marks {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+body.dark-mode .no-marks {
+  color: #95a5a6;
+}
+
+.assessment-progress {
+  margin: 0;
+  margin-top: 0.5rem;
+}
+
+/* Empty Assessments */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}
+
+body.dark-mode .empty-state {
+  color: #95a5a6;
+}
+
+@media (max-width: 768px) {
+  .assessments-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .assessments-header .btn {
+    width: 100%;
+  }
+
+  .assessment-item {
+    padding: 1rem;
+  }
+
+  .assessment-details {
+    grid-template-columns: 1fr;
+  }
+
+  .marks-section {
+    grid-template-columns: 1fr;
+  }
+
+  .marks-display {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
