@@ -10,6 +10,50 @@ body {
   color: #000000;
 }
 
+body.dark-mode .dashboard-header {
+  background: #1e1e1e;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  border-left: 5px solid #c8a951;
+}
+
+body.dark-mode .dashboard-header h2 {
+  color: #f5f5f5;
+}
+
+body.dark-mode .dashboard-header p {
+  color: #d0d0d0;
+}
+
+body.dark-mode .course-card {
+  background: #1e1e1e;
+  color: #f5f5f5;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .course-meta,
+body.dark-mode .stat .label,
+body.dark-mode .progress-text,
+body.dark-mode .assessment-meta {
+  color: #d0d0d0;
+}
+
+body.dark-mode .assessment-item,
+body.dark-mode .empty-state {
+  background: #1e1e1e;
+  color: #f5f5f5;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .courses h3,
+body.dark-mode .assessments h3,
+body.dark-mode .chart-section h3 {
+  color: #f5f5f5;
+}
+
+body.dark-mode .progress {
+  background: #3a3a3a;
+}
+
 /* Navbar */
 .navbar {
   background-color: #8e1726;
@@ -63,7 +107,6 @@ body {
   font-size: 0.9rem;
   /* was 1rem */
 }
-
 
 /* Space between sections */
 section {
@@ -229,4 +272,24 @@ section {
 .status.completed {
   background: #27ae60;
   color: #fafaf7;
+}
+
+.chart-section {
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  background: #fafaf7;
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  min-height: 350px;
+  margin: 0 auto;
+}
+
+#coursesChart {
+  width: 100% !important;
+  height: 300px !important;
 }

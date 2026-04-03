@@ -19,11 +19,11 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-logo" style="cursor: pointer;" onclick="handleLogoClick()">
-                <span class="logo-icon">📚</span>
+                <span class="logo-icon">📚 </span>
                 <span class="logo-text">Smart Course Companion</span>
             </div>
             <div class="navbar-menu">
-                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode"> 🌙</button>
                 <div id="navAuthLinks" style="display: flex; gap: 1rem; align-items: center;">
                     <a href="#" class="nav-link active" onclick="switchAuthView('loginView')">Login</a>
                     <a href="#" class="btn btn-primary" style="padding: 0.4rem 1rem;"
@@ -179,6 +179,13 @@
 
                 </div>
 
+            </section>
+
+            <section class="chart-section">
+                <h3>Performance Overview</h3>
+                <div class="chart-card">
+                    <canvas id="coursesChart"></canvas>
+                </div>
             </section>
 
             <section class="assessments">
@@ -412,6 +419,7 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/data-store.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/courses.js"></script>
