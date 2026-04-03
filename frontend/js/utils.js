@@ -202,12 +202,16 @@ function toggleTheme() {
   document.body.className = `${newTheme}-mode`;
   saveToLocalStorage('theme', newTheme);
   updateThemeButton(newTheme);
+
+  if (typeof renderDashboard === 'function') {
+    renderDashboard();
+  }
 }
 
 function updateThemeButton(theme) {
   const themeButton = document.getElementById('themeToggle');
   if (themeButton) {
-    themeButton.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeButton.textContent = theme === 'dark' ? ' ☀️ ' : ' 🌙 ';
   }
 }
 
