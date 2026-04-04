@@ -5,10 +5,8 @@ const path = require('path');
 const sequelize = require('./database');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
-
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -23,7 +21,6 @@ const Assessment = require('./models/Assessment');
 // Define relationships
 User.hasMany(Course, { foreignKey: 'UserId' });
 Course.belongsTo(User, { foreignKey: 'UserId' });
-
 Course.hasMany(Assessment, { foreignKey: 'CourseId' });
 Assessment.belongsTo(Course, { foreignKey: 'CourseId' });
 
@@ -38,6 +35,14 @@ app.use('/api/auth', authRoutes);
 
 const calculationRoutes = require('./routes/calculations');
 app.use('/api', calculationRoutes);
+
+// Admin auth routes (register/login - no token needed)
+const adminAuthRoutes = require('./routes/adminAuthRoutes');
+app.use('/api/adminauth', adminAuthRoutes);
+
+// Protected admin routes (requires JWT + admin role)
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/api/admin', adminRoutes);
 
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
