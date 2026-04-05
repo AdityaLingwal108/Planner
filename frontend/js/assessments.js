@@ -43,6 +43,27 @@ function handleCreateAssessment(event) {
   clearFormErrors('createAssessmentForm');
   toggleCreateAssessmentForm();
 
+  // Save to DB
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    fetch(`/api/courses/${courseId}/assessments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        title: formData.title, type: formData.type,
+        description: formData.description,
+        dueDate: formData.dueDate, weight: formData.weight,
+        totalMarks: formData.totalMarks, status: formData.status
+      })
+    }).then(async res => {
+      if (res.ok) {
+        const saved = await res.json();
+        // Update dataStore id to match DB id
+        newAssessment.id = String(saved.id);
+      }
+    }).catch(e => console.warn('Could not save assessment to DB:', e));
+  }
+
   // Re-render assessments
   renderAssessments(courseId);
 
@@ -52,6 +73,10 @@ function handleCreateAssessment(event) {
 function handleEditAssessment(event, courseId, assessmentId) {
   event.preventDefault();
 
+  // Always use the live currentCourseId — the value baked into the HTML
+  // at render time may be a stale mock id if the DB load remapped it
+  const activeCourseId = dataStore.currentCourseId || courseId;
+
   const earnedMarksInput = document.getElementById(`earnedMarks-${assessmentId}`);
   const statusInput = document.getElementById(`status-${assessmentId}`);
 
@@ -60,8 +85,12 @@ function handleEditAssessment(event, courseId, assessmentId) {
   const earnedMarks = earnedMarksInput.value === '' ? null : parseFloat(earnedMarksInput.value);
   const status = statusInput.value;
 
-  const assessment = dataStore.getAssessmentById(courseId, assessmentId);
-  if (!assessment) return;
+  const assessment = dataStore.getAssessmentById(activeCourseId, assessmentId);
+  if (!assessment) {
+    // Id mismatch — just re-render with current data so the list stays visible
+    renderAssessments(activeCourseId);
+    return;
+  }
 
   // Validate
   if (earnedMarks !== null && (earnedMarks < 0 || earnedMarks > assessment.totalMarks)) {
@@ -69,12 +98,22 @@ function handleEditAssessment(event, courseId, assessmentId) {
     return;
   }
 
-  dataStore.updateAssessment(courseId, assessmentId, {
+  dataStore.updateAssessment(activeCourseId, assessmentId, {
     earnedMarks: earnedMarks,
     status: status,
   });
 
-  renderAssessments(courseId);
+  // Save to DB
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    fetch(`/api/courses/${activeCourseId}/assessments/${assessmentId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ earnedMarks, status })
+    }).catch(e => console.warn('Could not update assessment in DB:', e));
+  }
+
+  renderAssessments(activeCourseId);
   showNotification('Assessment updated successfully!', 'success');
 }
 
@@ -83,8 +122,20 @@ function handleDeleteAssessment(courseId, assessmentId) {
     return;
   }
 
-  dataStore.deleteAssessment(courseId, assessmentId);
-  renderAssessments(courseId);
+  const activeCourseId = dataStore.currentCourseId || courseId;
+
+  dataStore.deleteAssessment(activeCourseId, assessmentId);
+
+  // Delete from DB
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    fetch(`/api/courses/${activeCourseId}/assessments/${assessmentId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    }).catch(e => console.warn('Could not delete assessment from DB:', e));
+  }
+
+  renderAssessments(activeCourseId);
   showNotification('Assessment deleted successfully!', 'success');
 }
 

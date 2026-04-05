@@ -97,18 +97,7 @@ function logoutAdmin() {
 }
 
 
-function applyTheme(theme) {
-  document.body.classList.remove('light-mode', 'dark-mode');
-  document.body.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
-  localStorage.setItem('theme', theme);
-  const btn = document.getElementById('themeToggleBtn');
-  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-}
-
-function initTheme() {
-  const saved = localStorage.getItem('theme') || 'light';
-  applyTheme(saved);
-}
+// Theme is managed by utils.js (applyTheme / initTheme / toggleTheme)
 
 
 
@@ -346,9 +335,9 @@ function loadAssessments(courseId) {
     return;
   }
 
-  const adminCats = (course?.categories || []).map((cat, i) => ({
+  const adminCats = (course?.categories || []).map((cat) => ({
     ...cat,
-    _id:      `${courseId}-admin-${i}`,
+    _id:      cat._id,          // real DB id — set by GET /api/admin/courses
     _source:  'admin',
     title:    cat.name || cat.title || '',
   }));
@@ -404,33 +393,28 @@ function renderAssessmentList(list) {
   });
 }
 
-function deleteAssessment(idx) {
+async function deleteAssessment(idx) {
   const courseId = document.getElementById('courseSelect')?.value;
   if (!courseId) return;
 
   const item = currentAssessments[idx];
   if (!item) return;
 
-  currentAssessments.splice(idx, 1);
+  if (!confirm(`Delete "${item.title || item.name}"? This cannot be undone.`)) return;
 
   if (item._source === 'admin') {
-    const course = courses.find(c => c._id === courseId);
-    if (course) {
-      course.categories = currentAssessments
-        .filter(a => a._source === 'admin')
-        .map(a => ({
-          name:        a.title || a.name,
-          type:        a.type,
-          description: a.description,
-          dueDate:     a.dueDate,
-          weight:      a.weight,
-          totalMarks:  a.totalMarks,
-          status:      a.status,
-        }));
-      adminSaveCourses(courses);
+    // item._id is now the real DB Assessment id
+    const res = await adminFetch(`${ADMIN_API}/courses/${courseId}/categories/${item._id}`, {
+      method: 'DELETE',
+    });
+    if (!res) return;
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      showToast(d.error || 'Error deleting assessment.', 'error');
+      return;
     }
   } else {
-    // Remove from student localStorage
+    // Student-side: remove from localStorage
     const remaining = getStudentAssessments(courseId).filter(
       a => (a.id || a._id) !== (item._id || item.id)
     );
@@ -438,7 +422,9 @@ function deleteAssessment(idx) {
   }
 
   showToast('Assessment deleted.');
-  renderAssessmentList(currentAssessments);
+  // Reload from server so the list is always in sync
+  await loadCourses();
+  loadAssessments(courseId);
 }
 
 function saveAssessments(courseId) {
@@ -622,10 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const btn = document.getElementById('themeToggleBtn');
   if (btn) {
-    btn.addEventListener('click', () => {
-      const current = localStorage.getItem('theme') || 'light';
-      applyTheme(current === 'dark' ? 'light' : 'dark');
-    });
+    btn.addEventListener('click', toggleTheme);
   }
 
   initAddCourseForm();

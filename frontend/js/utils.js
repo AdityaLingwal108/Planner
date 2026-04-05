@@ -37,58 +37,30 @@ function validateEmail(email) {
 
 function validateCourseForm(formData) {
   const errors = {};
-  
-  if (!formData.code.trim()) {
-    errors.code = 'Course code is required';
-  }
-  if (!formData.name.trim()) {
-    errors.name = 'Course name is required';
-  }
-  if (!formData.instructor.trim()) {
-    errors.instructor = 'Instructor name is required';
-  }
-  
+  if (!formData.code.trim()) errors.code = 'Course code is required';
+  if (!formData.name.trim()) errors.name = 'Course name is required';
+  if (!formData.instructor.trim()) errors.instructor = 'Instructor name is required';
   return errors;
 }
 
 function validateAssessmentForm(formData) {
   const errors = {};
-  
-  if (!formData.type) {
-    errors.type = 'Assessment type is required';
-  }
-  if (!formData.title.trim()) {
-    errors.title = 'Assessment title is required';
-  }
-  if (!formData.dueDate) {
-    errors.dueDate = 'Due date is required';
-  }
-  if (!formData.totalMarks || formData.totalMarks <= 0) {
-    errors.totalMarks = 'Total marks must be greater than 0';
-  }
-  if (!formData.weight || formData.weight < 0 || formData.weight > 100) {
-    errors.weight = 'Weight must be between 0 and 100';
-  }
-  
+  if (!formData.type) errors.type = 'Assessment type is required';
+  if (!formData.title.trim()) errors.title = 'Assessment title is required';
+  if (!formData.dueDate) errors.dueDate = 'Due date is required';
+  if (!formData.totalMarks || formData.totalMarks <= 0) errors.totalMarks = 'Total marks must be greater than 0';
+  if (!formData.weight || formData.weight < 0 || formData.weight > 100) errors.weight = 'Weight must be between 0 and 100';
   return errors;
 }
 
 // Date Formatting
 function formatDate(date) {
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  }
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  });
+  if (!(date instanceof Date)) date = new Date(date);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 function formatDateInput(date) {
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  }
+  if (!(date instanceof Date)) date = new Date(date);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -96,13 +68,10 @@ function formatDateInput(date) {
 }
 
 function getDaysUntilDue(dueDate) {
-  if (!(dueDate instanceof Date)) {
-    dueDate = new Date(dueDate);
-  }
+  if (!(dueDate instanceof Date)) dueDate = new Date(dueDate);
   const now = new Date();
   const diff = dueDate - now;
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  return days;
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
 // Calculations
@@ -112,10 +81,10 @@ function calculatePercentage(earned, total) {
 }
 
 function getGradeColor(percentage) {
-  if (percentage >= 80) return '#27ae60'; // Green
-  if (percentage >= 70) return '#f39c12'; // Orange
-  if (percentage >= 60) return '#e74c3c'; // Red
-  return '#95a5a6'; // Gray
+  if (percentage >= 80) return '#27ae60';
+  if (percentage >= 70) return '#f39c12';
+  if (percentage >= 60) return '#e74c3c';
+  return '#95a5a6';
 }
 
 function getProgressBarWidth(percentage) {
@@ -124,13 +93,7 @@ function getProgressBarWidth(percentage) {
 
 // Type Icons
 function getAssessmentIcon(type) {
-  const icons = {
-    'Assignment': '📝',
-    'Quiz': '❓',
-    'Exam': '📋',
-    'Lab': '🔬',
-    'Project': '🚀',
-  };
+  const icons = { 'Assignment': '📝', 'Quiz': '❓', 'Exam': '📋', 'Lab': '🔬', 'Project': '🚀' };
   return icons[type] || '📄';
 }
 
@@ -138,81 +101,75 @@ function getAssessmentIcon(type) {
 function getStatusBadgeClass(status) {
   return status === 'completed' ? 'badge-success' : 'badge-pending';
 }
-
 function getStatusBadgeText(status) {
   return status === 'completed' ? '✓ Completed' : '⏳ Pending';
 }
 
-// Event Handlers
+// Form Errors
 function clearFormErrors(formId) {
   const form = document.getElementById(formId);
   if (form) {
-    form.querySelectorAll('.error-message').forEach(error => {
-      error.textContent = '';
-    });
-    form.querySelectorAll('.form-group input, .form-group select, .form-group textarea').forEach(input => {
-      input.classList.remove('error');
-    });
+    form.querySelectorAll('.error-message').forEach(e => e.textContent = '');
+    form.querySelectorAll('.form-group input, .form-group select, .form-group textarea').forEach(i => i.classList.remove('error'));
   }
 }
 
 function displayFormErrors(formId, errors) {
   const form = document.getElementById(formId);
   if (!form) return;
-
   clearFormErrors(formId);
-
   Object.keys(errors).forEach(fieldName => {
     const errorElement = document.getElementById(`${fieldName}Error`);
     const inputElement = form.querySelector(`[name="${fieldName}"]`);
-    
-    if (errorElement) {
-      errorElement.textContent = errors[fieldName];
-    }
-    if (inputElement) {
-      inputElement.classList.add('error');
-    }
+    if (errorElement) errorElement.textContent = errors[fieldName];
+    if (inputElement) inputElement.classList.add('error');
   });
 }
 
-// Local Storage (for future backend integration)
+// Local Storage
 function saveToLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-
 function getFromLocalStorage(key) {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 }
-
 function removeFromLocalStorage(key) {
   localStorage.removeItem(key);
 }
 
-// Theme Management
+// ── Theme Management ──────────────────────────────────────────────────────────
+// Single source of truth for both the student app (index.html) and admin page.
+// Handles both button IDs: 'themeToggle' (student) and 'themeToggleBtn' (admin).
+
+function applyTheme(theme) {
+  document.body.classList.remove('light-mode', 'dark-mode');
+  document.body.classList.add(theme + '-mode');
+  localStorage.setItem('theme', theme);
+
+  // Update whichever button exists on this page
+  const btn = document.getElementById('themeToggle') || document.getElementById('themeToggleBtn');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
 function initTheme() {
-  const theme = getFromLocalStorage('theme') || 'light';
-  document.body.className = `${theme}-mode`;
-  updateThemeButton(theme);
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
 }
 
 function toggleTheme() {
-  const currentTheme = document.body.className.includes('dark') ? 'dark' : 'light';
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.body.className = `${newTheme}-mode`;
-  saveToLocalStorage('theme', newTheme);
-  updateThemeButton(newTheme);
+  const isDark = document.body.classList.contains('dark-mode');
+  applyTheme(isDark ? 'light' : 'dark');
 
   if (typeof renderDashboard === 'function') {
     renderDashboard();
   }
 }
 
+// Keep old name working in case anything calls it directly
 function updateThemeButton(theme) {
-  const themeButton = document.getElementById('themeToggle');
-  if (themeButton) {
-    themeButton.textContent = theme === 'dark' ? ' ☀️ ' : ' 🌙 ';
-  }
+  const btn = document.getElementById('themeToggle') || document.getElementById('themeToggleBtn');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
 }
 
 // String Utilities

@@ -364,3 +364,88 @@ class DataStore {
 
 // Create global data store instance
 const dataStore = new DataStore();
+
+// If user is logged in, clear mock data immediately so course manager shows empty
+// until real DB courses are loaded
+if (localStorage.getItem('jwt_token')) {
+    dataStore.courses = [];
+    dataStore.assessments = {};
+}
+
+// After page loads, fetch real courses from API
+// If DB has courses → use only those (replace mock data)
+// If DB is empty → keep mock data as placeholder
+window.addEventListener('load', async () => {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return;
+
+    try {
+        const res = await fetch('/api/courses', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;
+
+        const dbCourses = await res.json();
+
+        // DB has real courses — replace mock data entirely
+        if (dbCourses && dbCourses.length > 0) {
+            dataStore.courses = [];
+            dataStore.assessments = {};
+
+            for (const c of dbCourses) {
+                const dbId = String(c.id);
+                dataStore.courses.push({
+                    id:          dbId,
+                    code:        c.code,
+                    name:        c.name,
+                    instructor:  c.instructor,
+                    term:        c.term,
+                    credits:     c.credits || 3,
+                    description: c.description || '',
+                    createdAt:   new Date(c.createdAt || Date.now()),
+                });
+
+                // Load assessments for this course
+                try {
+                    const aRes = await fetch(`/api/courses/${c.id}/assessments`, {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (!aRes.ok) continue;
+                    const assessments = await aRes.json();
+                    dataStore.assessments[dbId] = (assessments || []).map(a => ({
+                        id:          String(a.id),
+                        courseId:    dbId,
+                        type:        a.type,
+                        title:       a.title,
+                        description: a.description || '',
+                        dueDate:     new Date(a.dueDate),
+                        weight:      a.weight,
+                        totalMarks:  a.totalMarks,
+                        earnedMarks: a.earnedMarks,
+                        status:      a.status,
+                        createdAt:   new Date(a.createdAt || Date.now()),
+                    }));
+                } catch(e) {}
+            }
+        }
+        // If dbCourses is empty, mock data stays untouched as placeholder
+
+        // Re-render whichever page is active
+        const coursesPage = document.getElementById('coursesPage');
+        if (coursesPage && coursesPage.classList.contains('active') && typeof renderCourses === 'function') {
+            renderCourses();
+        }
+        const dashPage = document.getElementById('dashboardPage');
+        if (dashPage && dashPage.classList.contains('active') && typeof renderDashboard === 'function') {
+            renderDashboard();
+        }
+        // Re-render assessments if the course-detail/assessments page is active
+        const assessmentsPage = document.getElementById('assessmentsPage');
+        if (assessmentsPage && assessmentsPage.classList.contains('active') && typeof renderAssessments === 'function' && dataStore.currentCourseId) {
+            renderAssessments(dataStore.currentCourseId);
+        }
+
+    } catch(e) {
+        console.warn('Could not load courses from API, using mock data', e);
+    }
+});

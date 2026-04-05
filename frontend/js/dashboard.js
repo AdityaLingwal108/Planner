@@ -20,17 +20,35 @@ async function renderDashboard() {
     assessmentList.innerHTML = '<li class="assessment-item"><div><h4>Loading...</h4></div></li>';
 
     try {
-        // window.fetchWithAuth is defined by Person 1 in auth.js
-        const response = await window.fetchWithAuth('/api/dashboard');
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch('/api/dashboard', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
 
         if (!response.ok) {
+            console.warn('Dashboard API returned', response.status, '- falling back to dataStore');
             renderDashboardFromStore(courseGrid, assessmentList);
             return;
         }
 
         const data = await response.json();
+
+        if (!data || !data.courses) {
+            console.warn('Dashboard API returned bad data - falling back to dataStore');
+            renderDashboardFromStore(courseGrid, assessmentList);
+            return;
+        }
+
+        if (data.courses.length === 0) {
+            renderDashboardFromStore(courseGrid, assessmentList);
+            return;
+        }
+
         renderDashboardCourses(courseGrid, data.courses);
-        renderUpcomingAssessments(assessmentList, data.upcoming);
+        renderUpcomingAssessments(assessmentList, data.upcoming || []);
 
     } catch (error) {
         console.warn('Dashboard API unavailable, using mock data:', error.message);

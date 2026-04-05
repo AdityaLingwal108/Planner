@@ -57,10 +57,31 @@ function handleCreateCourse(event) {
   clearFormErrors('createCourseForm');
   toggleCreateCourseForm();
 
+  // Save to DB so dashboard can see it
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    fetch('/api/courses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(formData)
+    }).then(async res => {
+      if (res.ok) {
+        const saved = await res.json();
+        // Update dataStore id to match DB id so assessments link correctly
+        const idx = dataStore.courses.findIndex(c => c.id === newCourse.id);
+        if (idx > -1) {
+          const oldId = dataStore.courses[idx].id;
+          dataStore.courses[idx].id = String(saved.id);
+          dataStore.assessments[String(saved.id)] = dataStore.assessments[oldId] || [];
+          delete dataStore.assessments[oldId];
+        }
+      }
+    }).catch(e => console.warn('Could not save course to DB:', e));
+  }
+
   // Re-render courses
   renderCourses();
 
-  // Show success message
   showNotification('Course added successfully!', 'success');
 }
 
@@ -188,9 +209,22 @@ function editCourse(courseId) {
   toggleEditCourseForm();
 }
 
-function deleteCourseFromCard(courseId) {
+async function deleteCourseFromCard(courseId) {
   if (!confirm('Are you sure you want to delete this course? All assessments will also be deleted.')) {
     return;
+  }
+
+  // Delete from DB first
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    try {
+      await fetch(`/api/courses/${courseId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+    } catch(e) {
+      console.warn('Could not delete from DB:', e);
+    }
   }
 
   dataStore.deleteCourse(courseId);
