@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Account - Smart Course Companion</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/account.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">Smart Course Companion</span>
+            </div>
+            <div class="navbar-menu">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+                <div id="navAppLinks" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="index.html" class="nav-link">Dashboard</a>
+                    <a href="manage-account.html" class="nav-link active">Account</a>
+                    <a href="adminpage.html" class="nav-link">Admin</a>
+                    <button class="btn btn-secondary" style="padding: 0.4rem 1rem;" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="account-container">
+            <h1>Manage Account</h1>
+            <p>Update your profile information below.</p>
+
+            <form id="accountForm" class="account-form">
+                <div class="form-group">
+                    <label for="accountName">Name</label>
+                    <input type="text" id="accountName" name="name" placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountEmail">Email</label>
+                    <input type="email" id="accountEmail" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountPassword">New Password</label>
+                    <input type="password" id="accountPassword" name="password" placeholder="Leave blank to keep current password">
+                    <small>Leave blank if you don't want to change your password.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountConfirmPassword">Confirm New Password</label>
+                    <input type="password" id="accountConfirmPassword" name="confirmPassword" placeholder="Confirm new password">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">Cancel</button>
+                </div>
+
+                <div id="accountMessage" class="message hidden"></div>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/manage-account.js"></script>
+</body>
+</html>
