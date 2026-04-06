@@ -108,7 +108,7 @@ async function handleDeleteCourse() {
   }
 
   const courseId = dataStore.currentCourseId;
-  
+
   try {
     await dataStore.deleteCourse(courseId);
     showNotification('Course deleted successfully!', 'success');
