@@ -13,6 +13,7 @@ app.use(express.json());
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+<<<<<<< HEAD
 // Sync SQL Database
 sequelize.sync()
     .then(() => console.log('Connected to SQLite Database & Tables Synced'))
@@ -23,3 +24,43 @@ app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+=======
+// Import models
+const User = require('./models/User');
+const Course = require('./models/Course');
+const Assessment = require('./models/Assessment');
+
+// Define relationships
+User.hasMany(Course, { foreignKey: 'UserId' });
+Course.belongsTo(User, { foreignKey: 'UserId' });
+Course.hasMany(Assessment, { foreignKey: 'CourseId' });
+Assessment.belongsTo(Course, { foreignKey: 'CourseId' });
+
+// Sync database
+sequelize.sync({ alter: true })
+    .then(() => console.log('Connected to SQLite Database & Tables Synced'))
+    .catch((err) => console.error('Database sync error:', err));
+
+// Routes
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
+const calculationRoutes = require('./routes/calculations');
+app.use('/api', calculationRoutes);
+
+// Admin auth routes (register/login - no token needed)
+const adminAuthRoutes = require('./routes/adminAuthRoutes');
+app.use('/api/adminauth', adminAuthRoutes);
+
+// Protected admin routes (requires JWT + admin role)
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/api/admin', adminRoutes);
+
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c

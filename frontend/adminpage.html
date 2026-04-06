@@ -22,6 +22,7 @@
         </header>
         <div class="card">
             <h2>Add New Course</h2>
+<<<<<<< HEAD
             <h4>Enter In Manually</h4>
             <div class="addCourseForm">
                 <input type="text" placeholder="Course Code (e.g., COMP248)">
@@ -73,10 +74,115 @@
                         <input type="text" placeholder="Assessment Name (e.g., Midterm)">
                         <input type="number" placeholder="Weight %" min="0" max="100">
                         <button class="addAssessmentButton">Add Assessment</button>
+=======
+            <div class="addCourseForm">
+                <div class="formField fullWidth">
+                    <label>Course Code <span class="req">*</span></label>
+                    <input id="courseCodeInput" type="text" placeholder="e.g., SOEN 287">
+                </div>
+
+                <div class="formField fullWidth">
+                    <label>Course Name <span class="req">*</span></label>
+                    <input id="courseNameInput" type="text" placeholder="e.g., Web Programming">
+                </div>
+
+                <div class="formField fullWidth">
+                    <label>Instructor <span class="req">*</span></label>
+                    <input id="instructorInput" type="text" placeholder="e.g., Dr. John Smith">
+                </div>
+                <div class="formField">
+                    <label>Term</label>
+                    <select id="termInput">
+                        <option value="Winter 2026">Winter 2026</option>
+                        <option value="Summer 2026">Summer 2026</option>
+                        <option value="Fall 2026">Fall 2026</option>
+                        <option value="Winter 2027">Winter 2027</option>
+                        <option value="Summer 2027">Summer 2027</option>
+                        <option value="Fall 2027">Fall 2027</option>
+                    </select>
+                </div>
+                <div class="formField">
+                    <label>Credits</label>
+                    <input id="creditsInput" type="number" min="1" max="6" value="3">
+                </div>
+                <div class="formField fullWidth">
+                    <label>Description</label>
+                    <textarea id="descriptionInput" placeholder="Course description (optional)"></textarea>
+                </div>
+                <div class="formField">
+                    <label>Template (optional)</label>
+                    <select id="templateSelect">
+                        <option value="">-- No Template --</option>
+                        <option value="standard">Standard (Midterm 30%, Final 70%)</option>
+                        <option value="projectHeavy">Project Heavy (Project 40%, Final 60%)</option>
+                    </select>
+                </div>
+                <div class="assessmentFormButtons">
+                    <button class="addCourseFormButton">Create Course</button>
+                    <button class="cancelAssessmentButton" id="clearCourseFormBtn">Cancel</button>
+                </div>
+            </div>
+            <h2>Manage Courses</h2>
+            <div class="courseGrid">
+            </div>
+        </div>
+        <div class="card">
+            <h2>Manage Assessment</h2>
+            <div class="assessmentContainer">
+                <div class="assessmentContainerLeft">
+                    <select id="courseSelect">
+                        <option value="">-- Courses --</option>
+                    </select>
+                    <div class="addAssessmentForm">
+                        <div class="formField">
+                            <label>Type <span class="req">*</span></label>
+                            <select id="assessmentType">
+                                <option value="">Select Type</option>
+                                <option value="Assignment">Assignment</option>
+                                <option value="Quiz">Quiz</option>
+                                <option value="Exam">Exam</option>
+                                <option value="Lab">Lab</option>
+                                <option value="Project">Project</option>
+                            </select>
+                        </div>
+                        <div class="formField">
+                            <label>Title <span class="req">*</span></label>
+                            <input id="assessmentTitle" type="text" placeholder="e.g., Assignment 1">
+                        </div>
+                        <div class="formField fullWidth">
+                            <label>Description</label>
+                            <textarea id="assessmentDescription" placeholder="Assessment description (optional)"></textarea>
+                        </div>
+                        <div class="formField">
+                            <label>Due Date <span class="req">*</span></label>
+                            <input id="assessmentDueDate" type="date">
+                        </div>
+                        <div class="formField">
+                            <label>Weight (%) <span class="req">*</span></label>
+                            <input id="assessmentWeight" type="number" placeholder="10" min="0" max="100" value="10">
+                        </div>
+                        <div class="formField">
+                            <label>Total Marks <span class="req">*</span></label>
+                            <input id="assessmentTotalMarks" type="number" placeholder="100" min="1" value="100">
+                        </div>
+                        <div class="formField">
+                            <label>Status</label>
+                            <select id="assessmentStatus">
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="assessmentFormButtons">
+                            <button class="addAssessmentButton">Add Assessment</button>
+                            <button class="cancelAssessmentButton" id="clearAssessmentFormBtn">Cancel</button>
+                        </div>
+
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c
                     </div>
                 </div>
                 <div class="assessmentContainerRight">
                     <div class="assessmentList">
+<<<<<<< HEAD
                         <div class="assessmentItem">
                             <p>Assessment Name: <span class="assessmentName">Midterm</span></p>
                             <p>Assessment Weight: <span class="assessmentWeight">30%</span></p>
@@ -90,13 +196,23 @@
                     </div>
                 </div>
             </div> 
+=======
+                    </div>
+                </div>
+
+            </div>
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c
         </div>
         <div class="card">
             <h2>Usage Statistics</h2>
             <select id="assessmentProgressSelect">
+<<<<<<< HEAD
                 <option>-- Assessments --</option>
                 <option>Sample Assessment 1</option>
                 <option>Sample Assessment 2</option>
+=======
+                <option value="">-- Assessments --</option>
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c
             </select>
             <div class="progressContainer">
                 <div class="progressBar">
@@ -105,7 +221,17 @@
                 <div id="progressPercentText">0%</div>
             </div>
         </div>
+<<<<<<< HEAD
     </body>
     <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
 </html>
+=======
+
+    </body>
+    <script src="js/utils.js"></script> 
+    <script src="js/data-store.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</html>
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c

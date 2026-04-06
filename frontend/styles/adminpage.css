@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -381,3 +382,590 @@ body.light-mode select {
     background-color: #ffffff;
     border: 1px solid #ccc;
 }
+=======
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1a1a1a;
+    user-select: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h2 {
+    padding-bottom: 15px;
+}
+
+.card {
+    background: #f3f3f3;
+    padding: 25px;
+    margin-bottom: 60px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border-left: 20px solid var(--primary-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease,
+                background 0.3s ease, color 0.3s ease;
+}
+
+.card:hover {
+    transform: scaleY(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+}
+
+.topNavbar {
+    background-color: #9e1b26; 
+    height: 80px;
+    display: flex;
+    justify-content: center;  
+    align-items: center;      
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    margin-bottom: 50px;
+}
+
+.topNavbar {
+    display: flex;
+    gap: 40px;  
+}
+
+.navLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    color: #cfcfcf;
+}
+
+.webTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #cfcfcf;
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.dashboardLink {
+    color: #2c3e50;
+}
+
+.navLinks a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.navLinks a:hover {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.activeLink {
+    color: white;
+    font-weight: 600;
+}
+
+.logoutButton {
+    background-color: #2c3e50;
+    color: #cfcfcf;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 16px;
+}
+
+.logoutButton:hover {
+    background-color: #1a252f;
+    color: white;
+}
+
+.themeButton {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #cfcfcf;
+}
+
+.addCourseForm {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, 250px);
+}
+
+.addCourseForm input {
+    padding: 10px 12px;
+    border: 2px solid #6f6f6f;
+    border-radius: 6px;
+    background-color: #fafaf7;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.addCourseFormButton {
+    border: 2px solid #6f6f6f;
+    border-radius: 16px;
+    background-color: #fafaf7;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.addCourseFormButton:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.courseTemplate {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 2px solid #f3f3f3;
+    border-radius: 8px;
+    background-color: #fafaf7;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.courseGrid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.courseBox {
+    width: 200px;
+    height: 200px;
+    background: #fafaf7;
+    border-bottom: 5px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+                background 0.3s ease, color 0.3s ease;
+    justify-content: space-between;
+}
+
+.disabledCourseBox {
+    opacity: 0.5;
+}
+
+.courseBox:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.courseTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.courseTerm {
+    font-size: 12px;
+    color: #6f6f6f;
+}
+
+.courseProf {
+    font-size: 14px;
+    color: #000000;
+}
+
+.courseButtons {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+    border-radius: 8px;
+}
+
+.editButton {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+}
+
+.disableButton {
+    background-color: #000000;
+    color: white;
+    border-radius: 8px;
+}
+
+.enableButton {
+    background-color: #6f6f6f;
+    color: white;
+    border-radius: 8px;
+}
+
+.deleteButton {
+    background-color: #8e1726;
+    color: white;
+    border-radius: 8px;
+}
+
+.assessmentContainer {
+    display: flex;
+    gap: 50px;
+}
+
+.assessmentContainerLeft {
+    flex: 1;
+}
+
+.assessmentContainerRight {
+    flex: 1;
+}
+
+#courseSelect {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 2px solid #f3f3f3;
+    border-radius: 8px;
+    background-color: #fafaf7;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.addAssessmentForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    width: 100%;
+}
+
+.addAssessmentForm input[type="text"],
+.addAssessmentForm input[type="number"] {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.addAssessmentButton {
+    padding: 10px 12px;
+    border: 2px solid #6f6f6f;
+    background-color: #fafaf7;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    outline: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.addAssessmentButton:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.assessmentItem {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #fafaf7;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease,
+                transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.assessmentItem:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+
+.deleteAssessmentButton {
+    background-color: #8e1726;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    padding: 4px 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#assessmentProgressSelect {
+    width: 50%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 2px solid #f3f3f3;
+    border-radius: 8px;
+    background-color: #fafaf7;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.fancyProgressContainer {
+    position: relative;
+}
+
+
+.progressBar {
+    width: 100%;
+    height: 26px;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.5);
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.8s ease;
+    background: var(--primary-color);
+}
+
+#progressPercentText {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: right;
+}
+
+
+:root {
+    --primary-color: #3498db;
+    --primary-gradient: linear-gradient(90deg, #3498db, #007ccf);
+}
+
+body.light-mode {
+    background-color: #f0f0f0;
+    color: #111111;
+    --primary-color: #8e1726;
+    --primary-gradient: linear-gradient(90deg, #8e1726, #c0392b);
+}
+
+body.light-mode .card,
+body.light-mode .adminOverviewCard {
+    background: #ffffff;
+    color: #111111;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.light-mode .courseBox,
+body.light-mode .assessmentItem {
+    background: #f9f9f9;
+    color: #111111;
+}
+
+body.light-mode .addCourseForm input,
+body.light-mode .addAssessmentForm input,
+body.light-mode select,
+body.light-mode textarea {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    color: #111111;
+}
+
+body.light-mode .courseTitle,
+body.light-mode .courseTerm,
+body.light-mode .courseProf,
+body.light-mode h2,
+body.light-mode h4,
+body.light-mode p,
+body.light-mode label {
+    color: #111111;
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    --primary-color: #3498db;
+    --primary-gradient: linear-gradient(90deg, #3498db, #007ccf);
+}
+
+body.dark-mode .card,
+body.dark-mode .adminOverviewCard {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+body.dark-mode .courseBox {
+    background: #3a3a3a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .assessmentItem {
+    background: #3a3a3a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .courseTitle { color: #ffffff; }
+body.dark-mode .courseTerm  { color: #aaaaaa; }
+body.dark-mode .courseProf  { color: #cccccc; }
+
+body.dark-mode .addCourseForm input,
+body.dark-mode .addAssessmentForm input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode h2,
+body.dark-mode h4,
+body.dark-mode p,
+body.dark-mode label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .assessmentMeta { color: #aaaaaa; }
+
+
+.addAssessmentForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    padding: 0;
+    margin-top: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.formField {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.formField.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.formField label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.formField label .req {
+    color: #8e1726;
+    margin-left: 2px;
+}
+
+.addAssessmentForm input[type="text"],
+.addAssessmentForm input[type="number"],
+.addAssessmentForm input[type="date"],
+.addAssessmentForm select,
+.addAssessmentForm textarea {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fafaf7;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.addAssessmentForm input:focus,
+.addAssessmentForm select:focus,
+.addAssessmentForm textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(142, 23, 38, 0.12);
+}
+
+.addAssessmentForm textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.assessmentFormButtons {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.cancelAssessmentButton {
+    padding: 10px 12px;
+    border: 2px solid #2c3e50;
+    background-color: #2c3e50;
+    color: #cfcfcf;
+    font-size: 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancelAssessmentButton:hover {
+    background-color: #1a252f;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+
+.assessmentItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.assessmentItem p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+.assessmentTypeBadge {
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 8px;
+}
+
+.assessmentMeta {
+    font-size: 12px;
+    color: #6f6f6f;
+}
+
+.assessmentItemFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.statusBadge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+    .statusBadge.pending   { background: #fff3cd; color: #856404; }
+    .statusBadge.completed { background: #d1e7dd; color: #0f5132; }
+
+    body.light-mode .formField label { color: #333; }
+    body.light-mode .addAssessmentForm input,
+    body.light-mode .addAssessmentForm select,
+    body.light-mode .addAssessmentForm textarea {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+}
+>>>>>>> 3b783fc94735420146303896b04e722020dc791c
