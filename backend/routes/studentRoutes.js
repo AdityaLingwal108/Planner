@@ -5,6 +5,35 @@ const Course = require('../models/Course');
 const Assessment = require('../models/Assessment');
 const AssessmentCategory = require('../models/AssessmentCategory');
 
+// ==================== VALIDATION HELPERS ====================
+
+const validateString = (value, fieldName, minLen = 1, maxLen = 255) => {
+    if (typeof value !== 'string') return `${fieldName} must be a string.`;
+    const trimmed = value.trim();
+    if (trimmed.length < minLen) return `${fieldName} is required.`;
+    if (trimmed.length > maxLen) return `${fieldName} must be at most ${maxLen} characters.`;
+    return null;
+};
+
+const validateNumber = (value, fieldName, min = 0, max = Infinity) => {
+    const num = Number(value);
+    if (isNaN(num)) return `${fieldName} must be a number.`;
+    if (num < min) return `${fieldName} must be at least ${min}.`;
+    if (num > max) return `${fieldName} must be at most ${max}.`;
+    return null;
+};
+
+const validateDate = (value, fieldName) => {
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return `${fieldName} must be a valid date.`;
+    return null;
+};
+
+const sanitizeString = (value) => {
+    if (typeof value !== 'string') return '';
+    return value.trim().replace(/<[^>]*>/g, ''); // Remove HTML tags
+};
+
 // All routes require JWT authentication
 router.use(protect);
 
@@ -44,17 +73,33 @@ router.post('/courses', async (req, res) => {
     try {
         const { code, name, instructor, term, credits, description } = req.body;
 
-        if (!code || !name || !instructor || !term) {
-            return res.status(400).json({ error: 'Code, name, instructor, and term are required.' });
+        // Validate required fields
+        const errors = [];
+        let err = validateString(code, 'Code', 1, 20);
+        if (err) errors.push(err);
+        err = validateString(name, 'Name', 1, 100);
+        if (err) errors.push(err);
+        err = validateString(instructor, 'Instructor', 1, 100);
+        if (err) errors.push(err);
+        err = validateString(term, 'Term', 1, 50);
+        if (err) errors.push(err);
+        
+        if (credits !== undefined) {
+            err = validateNumber(credits, 'Credits', 1, 12);
+            if (err) errors.push(err);
+        }
+
+        if (errors.length > 0) {
+            return res.status(400).json({ error: errors.join(' ') });
         }
 
         const course = await Course.create({
-            code,
-            name,
-            instructor,
-            term,
+            code: sanitizeString(code),
+            name: sanitizeString(name),
+            instructor: sanitizeString(instructor),
+            term: sanitizeString(term),
             credits: credits || 3,
-            description: description || '',
+            description: sanitizeString(description || ''),
             UserId: req.user.id
         });
 
@@ -150,14 +195,27 @@ router.post('/courses/:courseId/assessments', async (req, res) => {
 
         const { title, type, description, dueDate, weight, totalMarks } = req.body;
 
-        if (!title || !type || !dueDate || weight === undefined || !totalMarks) {
-            return res.status(400).json({ error: 'Title, type, dueDate, weight, and totalMarks are required.' });
+        // Validate required fields
+        const errors = [];
+        let err = validateString(title, 'Title', 1, 100);
+        if (err) errors.push(err);
+        err = validateString(type, 'Type', 1, 50);
+        if (err) errors.push(err);
+        err = validateDate(dueDate, 'Due date');
+        if (err) errors.push(err);
+        err = validateNumber(weight, 'Weight', 0, 100);
+        if (err) errors.push(err);
+        err = validateNumber(totalMarks, 'Total marks', 1, 10000);
+        if (err) errors.push(err);
+
+        if (errors.length > 0) {
+            return res.status(400).json({ error: errors.join(' ') });
         }
 
         const assessment = await Assessment.create({
-            title,
-            type,
-            description: description || '',
+            title: sanitizeString(title),
+            type: sanitizeString(type),
+            description: sanitizeString(description || ''),
             dueDate,
             weight,
             totalMarks,

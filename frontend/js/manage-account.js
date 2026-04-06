@@ -72,7 +72,7 @@ async function handleAccountUpdate(event) {
     }
 
     try {
-        const response = await window.fetchWithAuth('/api/auth/update-profile', {
+        const response = await window.fetchWithAuth('/api/auth/user', {
             method: 'PUT',
             body: JSON.stringify(body)
         });
