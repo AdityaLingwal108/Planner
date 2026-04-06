@@ -31,7 +31,14 @@ const validateDate = (value, fieldName) => {
 
 const sanitizeString = (value) => {
     if (typeof value !== 'string') return '';
-    return value.trim().replace(/<[^>]*>/g, ''); // Remove HTML tags
+    // Simple sanitization: trim and encode HTML entities
+    return value
+        .trim()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
 };
 
 // All routes require JWT authentication

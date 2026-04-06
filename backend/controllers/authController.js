@@ -89,6 +89,16 @@ exports.updateProfile = async (req, res) => {
             return res.status(404).json({ error: 'User not found.' });
         }
 
+        // Validate name if provided
+        if (name !== undefined) {
+            if (typeof name !== 'string' || name.trim().length === 0) {
+                return res.status(400).json({ error: 'Name cannot be empty.' });
+            }
+            if (name.trim().length > 100) {
+                return res.status(400).json({ error: 'Name must be at most 100 characters.' });
+            }
+        }
+
         // Validate email if provided
         if (email && !emailRegex.test(email)) {
             return res.status(400).json({ error: 'Invalid email format.' });
@@ -108,7 +118,7 @@ exports.updateProfile = async (req, res) => {
         }
 
         // Update fields
-        if (name) user.name = name;
+        if (name) user.name = name.trim();
         if (email) user.email = email;
         if (password) {
             const salt = await bcrypt.genSalt(10);

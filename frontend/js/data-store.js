@@ -17,6 +17,7 @@ class DataStore {
       // No token - use empty state (user not logged in)
       this.courses = [];
       this.assessments = {};
+      this._initialized = true;
       return;
     }
     await this.fetchCoursesFromAPI();
@@ -28,7 +29,7 @@ class DataStore {
     try {
       const response = await window.fetchWithAuth('/api/student/courses');
       if (!response.ok) {
-        console.warn('Failed to fetch courses from API');
+        console.warn(`Failed to fetch courses from API: ${response.status} ${response.statusText}`);
         return;
       }
       const data = await response.json();
