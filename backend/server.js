@@ -17,12 +17,15 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 const User = require('./models/User');
 const Course = require('./models/Course');
 const Assessment = require('./models/Assessment');
+const AssessmentCategory = require('./models/AssessmentCategory');
 
 // Define relationships
 User.hasMany(Course, { foreignKey: 'UserId' });
 Course.belongsTo(User, { foreignKey: 'UserId' });
 Course.hasMany(Assessment, { foreignKey: 'CourseId' });
 Assessment.belongsTo(Course, { foreignKey: 'CourseId' });
+Course.hasMany(AssessmentCategory, { foreignKey: 'CourseId' });
+AssessmentCategory.belongsTo(Course, { foreignKey: 'CourseId' });
 
 // Sync database
 sequelize.sync({ alter: true })
@@ -43,6 +46,10 @@ app.use('/api/adminauth', adminAuthRoutes);
 // Protected admin routes (requires JWT + admin role)
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
+
+// Student routes (requires JWT authentication)
+const studentRoutes = require('./routes/studentRoutes');
+app.use('/api/student', studentRoutes);
 
 // SPA fallback - serve index.html for any unmatched routes
 app.use((req, res) => {
