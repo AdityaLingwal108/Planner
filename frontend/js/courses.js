@@ -1,10 +1,11 @@
 // Courses Page Management
 
-function showCoursesPage(event = null) {
+async function showCoursesPage(event = null) {
   if (event) event.preventDefault();
   //INTEGRATION: Hide other views before showing courses to prevent overlap
   if (typeof hideAllPages === 'function') hideAllPages();
   showPage('coursesPage');
+  await dataStore.initialize();
   renderCourses();
 }
 
@@ -25,7 +26,7 @@ function toggleEditCourseForm() {
   }
 }
 
-function handleCreateCourse(event) {
+async function handleCreateCourse(event) {
   event.preventDefault();
 
   const formData = {
@@ -44,27 +45,31 @@ function handleCreateCourse(event) {
     return;
   }
 
-  // Check if course code already exists
+  // Check if course code already exists locally
   if (dataStore.courses.some(c => c.code === formData.code)) {
     displayFormErrors('createCourseForm', { courseCode: 'This course code already exists' });
     return;
   }
 
-  const newCourse = dataStore.addCourse(formData);
+  try {
+    await dataStore.addCourse(formData);
 
-  // Reset form
-  document.getElementById('createCourseForm').reset();
-  clearFormErrors('createCourseForm');
-  toggleCreateCourseForm();
+    // Reset form
+    document.getElementById('createCourseForm').reset();
+    clearFormErrors('createCourseForm');
+    toggleCreateCourseForm();
 
-  // Re-render courses
-  renderCourses();
+    // Re-render courses
+    renderCourses();
 
-  // Show success message
-  showNotification('Course added successfully!', 'success');
+    // Show success message
+    showNotification('Course added successfully!', 'success');
+  } catch (error) {
+    showNotification(error.message || 'Failed to create course', 'error');
+  }
 }
 
-function handleEditCourse(event) {
+async function handleEditCourse(event) {
   event.preventDefault();
 
   const courseId = dataStore.currentCourseId;
@@ -82,29 +87,37 @@ function handleEditCourse(event) {
     return;
   }
 
-  dataStore.updateCourse(courseId, formData);
+  try {
+    await dataStore.updateCourse(courseId, formData);
 
-  clearFormErrors('editCourseForm');
-  toggleEditCourseForm();
+    clearFormErrors('editCourseForm');
+    toggleEditCourseForm();
 
-  // Re-render course details
-  renderCourseDetails(courseId);
+    // Re-render course details
+    renderCourseDetails(courseId);
 
-  showNotification('Course updated successfully!', 'success');
+    showNotification('Course updated successfully!', 'success');
+  } catch (error) {
+    showNotification(error.message || 'Failed to update course', 'error');
+  }
 }
 
-function handleDeleteCourse() {
+async function handleDeleteCourse() {
   if (!confirm('Are you sure you want to delete this course? All assessments will also be deleted.')) {
     return;
   }
 
   const courseId = dataStore.currentCourseId;
-  dataStore.deleteCourse(courseId);
-
-  showNotification('Course deleted successfully!', 'success');
-  setTimeout(() => {
-    showCoursesPage();
-  }, 500);
+  
+  try {
+    await dataStore.deleteCourse(courseId);
+    showNotification('Course deleted successfully!', 'success');
+    setTimeout(() => {
+      showCoursesPage();
+    }, 500);
+  } catch (error) {
+    showNotification(error.message || 'Failed to delete course', 'error');
+  }
 }
 
 function renderCourses() {
@@ -188,14 +201,18 @@ function editCourse(courseId) {
   toggleEditCourseForm();
 }
 
-function deleteCourseFromCard(courseId) {
+async function deleteCourseFromCard(courseId) {
   if (!confirm('Are you sure you want to delete this course? All assessments will also be deleted.')) {
     return;
   }
 
-  dataStore.deleteCourse(courseId);
-  showNotification('Course deleted successfully!', 'success');
-  renderCourses();
+  try {
+    await dataStore.deleteCourse(courseId);
+    showNotification('Course deleted successfully!', 'success');
+    renderCourses();
+  } catch (error) {
+    showNotification(error.message || 'Failed to delete course', 'error');
+  }
 }
 
 function renderCourseDetails(courseId) {

@@ -205,6 +205,11 @@ function handleLogout() {
     localStorage.removeItem('user_role');
     localStorage.removeItem('isLoggedIn');
 
+    // Reset dataStore to clear cached data
+    if (typeof dataStore !== 'undefined' && dataStore.reset) {
+        dataStore.reset();
+    }
+
     document.getElementById('navAppLinks').classList.add('hidden');
     document.getElementById('navAuthLinks').classList.remove('hidden');
 

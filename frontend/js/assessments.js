@@ -10,7 +10,7 @@ function toggleCreateAssessmentForm() {
   }
 }
 
-function handleCreateAssessment(event) {
+async function handleCreateAssessment(event) {
   event.preventDefault();
 
   const courseId = dataStore.currentCourseId;
@@ -36,20 +36,24 @@ function handleCreateAssessment(event) {
     return;
   }
 
-  const newAssessment = dataStore.addAssessment(courseId, formData);
+  try {
+    await dataStore.addAssessment(courseId, formData);
 
-  // Reset form
-  document.getElementById('createAssessmentForm').reset();
-  clearFormErrors('createAssessmentForm');
-  toggleCreateAssessmentForm();
+    // Reset form
+    document.getElementById('createAssessmentForm').reset();
+    clearFormErrors('createAssessmentForm');
+    toggleCreateAssessmentForm();
 
-  // Re-render assessments
-  renderAssessments(courseId);
+    // Re-render assessments
+    renderAssessments(courseId);
 
-  showNotification('Assessment added successfully!', 'success');
+    showNotification('Assessment added successfully!', 'success');
+  } catch (error) {
+    showNotification(error.message || 'Failed to create assessment', 'error');
+  }
 }
 
-function handleEditAssessment(event, courseId, assessmentId) {
+async function handleEditAssessment(event, courseId, assessmentId) {
   event.preventDefault();
 
   const earnedMarksInput = document.getElementById(`earnedMarks-${assessmentId}`);
@@ -69,23 +73,31 @@ function handleEditAssessment(event, courseId, assessmentId) {
     return;
   }
 
-  dataStore.updateAssessment(courseId, assessmentId, {
-    earnedMarks: earnedMarks,
-    status: status,
-  });
+  try {
+    await dataStore.updateAssessment(courseId, assessmentId, {
+      earnedMarks: earnedMarks,
+      status: status,
+    });
 
-  renderAssessments(courseId);
-  showNotification('Assessment updated successfully!', 'success');
+    renderAssessments(courseId);
+    showNotification('Assessment updated successfully!', 'success');
+  } catch (error) {
+    showNotification(error.message || 'Failed to update assessment', 'error');
+  }
 }
 
-function handleDeleteAssessment(courseId, assessmentId) {
+async function handleDeleteAssessment(courseId, assessmentId) {
   if (!confirm('Are you sure you want to delete this assessment?')) {
     return;
   }
 
-  dataStore.deleteAssessment(courseId, assessmentId);
-  renderAssessments(courseId);
-  showNotification('Assessment deleted successfully!', 'success');
+  try {
+    await dataStore.deleteAssessment(courseId, assessmentId);
+    renderAssessments(courseId);
+    showNotification('Assessment deleted successfully!', 'success');
+  } catch (error) {
+    showNotification(error.message || 'Failed to delete assessment', 'error');
+  }
 }
 
 function renderAssessments(courseId) {

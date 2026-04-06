@@ -1,237 +1,70 @@
-// Data Store - manages all application state and business logic
+// Data Store - API-backed application state management
+// Uses JWT authentication via window.fetchWithAuth()
+
 class DataStore {
   constructor() {
     this.courses = [];
     this.assessments = {};
     this.currentCourseId = null;
-    this.initializeData();
+    this._initialized = false;
   }
 
-  // Initialize with mock data
-  initializeData() {
-    this.courses = [
-      {
-        id: 'SOEN287',
-        code: 'SOEN 287',
-        name: 'Web Programming',
-        instructor: 'Dr. John Smith',
-        term: 'Winter 2026',
-        description: 'Introduction to web development with HTML, CSS, and JavaScript',
-        credits: 3,
-        createdAt: new Date('2026-01-15'),
-      },
-      {
-        id: 'COMP249',
-        code: 'COMP 249',
-        name: 'Object-Oriented Programming II',
-        instructor: 'Dr. Jane Doe',
-        term: 'Winter 2026',
-        description: 'Advanced OOP concepts including design patterns and SOLID principles',
-        credits: 3,
-        createdAt: new Date('2026-01-15'),
-      },
-      {
-        id: 'MATH203',
-        code: 'MATH 203',
-        name: 'Linear Algebra',
-        instructor: 'Prof. Robert Wilson',
-        term: 'Winter 2026',
-        description: 'Matrices, vectors, eigenvalues, and applications',
-        credits: 4,
-        createdAt: new Date('2026-01-15'),
-      },
-    ];
+  // ===== INITIALIZATION =====
+  async initialize() {
+    if (this._initialized) return;
+    const token = localStorage.getItem('jwt_token');
+    if (!token) {
+      // No token - use empty state (user not logged in)
+      this.courses = [];
+      this.assessments = {};
+      return;
+    }
+    await this.fetchCoursesFromAPI();
+    this._initialized = true;
+  }
 
-    this.assessments = {
-      'SOEN287': [
-        {
-          id: 'soen287-assign1',
-          courseId: 'SOEN287',
-          type: 'Assignment',
-          title: 'HTML & CSS Basics',
-          description: 'Create a personal portfolio website',
-          dueDate: new Date('2026-02-20'),
-          weight: 10,
-          earnedMarks: 18,
-          totalMarks: 20,
-          status: 'completed',
-          createdAt: new Date('2026-01-20'),
-        },
-        {
-          id: 'soen287-assign2',
-          courseId: 'SOEN287',
-          type: 'Assignment',
-          title: 'JavaScript Interactivity',
-          description: 'Add dynamic functionality to your portfolio',
-          dueDate: new Date('2026-03-10'),
-          weight: 15,
-          earnedMarks: null,
-          totalMarks: 25,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'soen287-quiz1',
-          courseId: 'SOEN287',
-          type: 'Quiz',
-          title: 'HTML/CSS Fundamentals Quiz',
-          description: 'Online quiz covering HTML tags and CSS selectors',
-          dueDate: new Date('2026-02-15'),
-          weight: 5,
-          earnedMarks: 9,
-          totalMarks: 10,
-          status: 'completed',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'soen287-midterm',
-          courseId: 'SOEN287',
-          type: 'Exam',
-          title: 'Midterm Exam',
-          description: 'Comprehensive exam covering first half of course',
-          dueDate: new Date('2026-03-15'),
-          weight: 25,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'soen287-final',
-          courseId: 'SOEN287',
-          type: 'Exam',
-          title: 'Final Exam',
-          description: 'Final comprehensive examination',
-          dueDate: new Date('2026-04-20'),
-          weight: 25,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'soen287-project',
-          courseId: 'SOEN287',
-          type: 'Project',
-          title: 'Smart Course Companion Project',
-          description: 'Build a full-stack web application',
-          dueDate: new Date('2026-03-27'),
-          weight: 20,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-01-30'),
-        },
-      ],
-      'COMP249': [
-        {
-          id: 'comp249-assign1',
-          courseId: 'COMP249',
-          type: 'Assignment',
-          title: 'Design Patterns Implementation',
-          description: 'Implement 3 design patterns',
-          dueDate: new Date('2026-02-25'),
-          weight: 15,
-          earnedMarks: 27,
-          totalMarks: 30,
-          status: 'completed',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'comp249-lab1',
-          courseId: 'COMP249',
-          type: 'Lab',
-          title: 'Lab 1: Inheritance & Polymorphism',
-          description: 'Practice inheritance and polymorphic behavior',
-          dueDate: new Date('2026-02-18'),
-          weight: 10,
-          earnedMarks: 9,
-          totalMarks: 10,
-          status: 'completed',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'comp249-midterm',
-          courseId: 'COMP249',
-          type: 'Exam',
-          title: 'Midterm Exam',
-          description: 'Midterm covering OOP fundamentals',
-          dueDate: new Date('2026-03-05'),
-          weight: 35,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'comp249-final',
-          courseId: 'COMP249',
-          type: 'Exam',
-          title: 'Final Exam',
-          description: 'Final comprehensive examination',
-          dueDate: new Date('2026-04-15'),
-          weight: 40,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-      ],
-      'MATH203': [
-        {
-          id: 'math203-assign1',
-          courseId: 'MATH203',
-          type: 'Assignment',
-          title: 'Matrix Operations',
-          description: 'Solve matrix equations',
-          dueDate: new Date('2026-02-14'),
-          weight: 12,
-          earnedMarks: 45,
-          totalMarks: 50,
-          status: 'completed',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'math203-assign2',
-          courseId: 'MATH203',
-          type: 'Assignment',
-          title: 'Eigenvalues & Eigenvectors',
-          description: 'Find eigenvalues and eigenvectors',
-          dueDate: new Date('2026-03-01'),
-          weight: 13,
-          earnedMarks: null,
-          totalMarks: 50,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'math203-quiz1',
-          courseId: 'MATH203',
-          type: 'Quiz',
-          title: 'Quiz 1: Vector Spaces',
-          description: 'Online quiz on vector spaces',
-          dueDate: new Date('2026-02-21'),
-          weight: 10,
-          earnedMarks: null,
-          totalMarks: 20,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-        {
-          id: 'math203-final',
-          courseId: 'MATH203',
-          type: 'Exam',
-          title: 'Final Exam',
-          description: 'Comprehensive final examination',
-          dueDate: new Date('2026-04-25'),
-          weight: 65,
-          earnedMarks: null,
-          totalMarks: 100,
-          status: 'pending',
-          createdAt: new Date('2026-02-01'),
-        },
-      ],
-    };
+  // ===== API METHODS =====
+  async fetchCoursesFromAPI() {
+    try {
+      const response = await window.fetchWithAuth('/api/student/courses');
+      if (!response.ok) {
+        console.warn('Failed to fetch courses from API');
+        return;
+      }
+      const data = await response.json();
+      this.courses = data.map(c => ({
+        id: String(c.id),
+        code: c.code,
+        name: c.name,
+        instructor: c.instructor,
+        term: c.term,
+        description: c.description || '',
+        credits: c.credits,
+        enabled: c.enabled,
+        createdAt: c.createdAt
+      }));
+      
+      // Build assessments map
+      this.assessments = {};
+      data.forEach(course => {
+        const courseId = String(course.id);
+        this.assessments[courseId] = (course.Assessments || []).map(a => ({
+          id: String(a.id),
+          courseId: courseId,
+          type: a.type,
+          title: a.title,
+          description: a.description || '',
+          dueDate: new Date(a.dueDate),
+          weight: a.weight,
+          earnedMarks: a.earnedMarks,
+          totalMarks: a.totalMarks,
+          status: a.status,
+          createdAt: a.createdAt
+        }));
+      });
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
   }
 
   // ===== COURSE METHODS =====
@@ -240,86 +73,203 @@ class DataStore {
   }
 
   getCourseById(courseId) {
-    return this.courses.find(c => c.id === courseId);
+    return this.courses.find(c => c.id === String(courseId));
   }
 
-  addCourse(courseData) {
-    const newCourse = {
-      id: courseData.code.replace(/\s+/g, ''),
-      ...courseData,
-      createdAt: new Date(),
-    };
-    this.courses.push(newCourse);
-    this.assessments[newCourse.id] = [];
-    return newCourse;
+  async addCourse(courseData) {
+    try {
+      const response = await window.fetchWithAuth('/api/student/courses', {
+        method: 'POST',
+        body: JSON.stringify(courseData)
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to create course');
+      }
+      
+      const newCourse = await response.json();
+      const formattedCourse = {
+        id: String(newCourse.id),
+        code: newCourse.code,
+        name: newCourse.name,
+        instructor: newCourse.instructor,
+        term: newCourse.term,
+        description: newCourse.description || '',
+        credits: newCourse.credits,
+        createdAt: new Date()
+      };
+      
+      this.courses.push(formattedCourse);
+      this.assessments[formattedCourse.id] = [];
+      return formattedCourse;
+    } catch (error) {
+      console.error('Error adding course:', error);
+      throw error;
+    }
   }
 
-  updateCourse(courseId, courseData) {
-    const course = this.getCourseById(courseId);
-    if (course) {
-      Object.assign(course, courseData);
+  async updateCourse(courseId, courseData) {
+    try {
+      const response = await window.fetchWithAuth(`/api/student/courses/${courseId}`, {
+        method: 'PUT',
+        body: JSON.stringify(courseData)
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to update course');
+      }
+      
+      const updatedCourse = await response.json();
+      const course = this.getCourseById(courseId);
+      if (course) {
+        Object.assign(course, {
+          code: updatedCourse.code,
+          name: updatedCourse.name,
+          instructor: updatedCourse.instructor,
+          term: updatedCourse.term,
+          description: updatedCourse.description || '',
+          credits: updatedCourse.credits
+        });
+      }
       return course;
+    } catch (error) {
+      console.error('Error updating course:', error);
+      throw error;
     }
-    return null;
   }
 
-  deleteCourse(courseId) {
-    const index = this.courses.findIndex(c => c.id === courseId);
-    if (index > -1) {
-      this.courses.splice(index, 1);
-      delete this.assessments[courseId];
+  async deleteCourse(courseId) {
+    try {
+      const response = await window.fetchWithAuth(`/api/student/courses/${courseId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to delete course');
+      }
+      
+      const index = this.courses.findIndex(c => c.id === String(courseId));
+      if (index > -1) {
+        this.courses.splice(index, 1);
+        delete this.assessments[String(courseId)];
+      }
       return true;
+    } catch (error) {
+      console.error('Error deleting course:', error);
+      throw error;
     }
-    return false;
   }
 
   // ===== ASSESSMENT METHODS =====
   getAssessmentsByCourse(courseId) {
-    return this.assessments[courseId] || [];
+    return this.assessments[String(courseId)] || [];
   }
 
   getAssessmentById(courseId, assessmentId) {
     const assessments = this.getAssessmentsByCourse(courseId);
-    return assessments.find(a => a.id === assessmentId);
+    return assessments.find(a => a.id === String(assessmentId));
   }
 
-  addAssessment(courseId, assessmentData) {
-    if (!this.assessments[courseId]) {
-      this.assessments[courseId] = [];
-    }
-    const newAssessment = {
-      id: `${courseId}-${Date.now()}`,
-      courseId,
-      ...assessmentData,
-      earnedMarks: assessmentData.earnedMarks || null,
-      createdAt: new Date(),
-    };
-    this.assessments[courseId].push(newAssessment);
-    return newAssessment;
-  }
-
-  updateAssessment(courseId, assessmentId, assessmentData) {
-    const assessment = this.getAssessmentById(courseId, assessmentId);
-    if (assessment) {
-      Object.assign(assessment, assessmentData);
-      return assessment;
-    }
-    return null;
-  }
-
-  deleteAssessment(courseId, assessmentId) {
-    const assessments = this.assessments[courseId];
-    if (assessments) {
-      const index = assessments.findIndex(a => a.id === assessmentId);
-      if (index > -1) {
-        assessments.splice(index, 1);
-        return true;
+  async addAssessment(courseId, assessmentData) {
+    try {
+      const response = await window.fetchWithAuth(`/api/student/courses/${courseId}/assessments`, {
+        method: 'POST',
+        body: JSON.stringify(assessmentData)
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to create assessment');
       }
+      
+      const newAssessment = await response.json();
+      const formatted = {
+        id: String(newAssessment.id),
+        courseId: String(courseId),
+        type: newAssessment.type,
+        title: newAssessment.title,
+        description: newAssessment.description || '',
+        dueDate: new Date(newAssessment.dueDate),
+        weight: newAssessment.weight,
+        earnedMarks: newAssessment.earnedMarks,
+        totalMarks: newAssessment.totalMarks,
+        status: newAssessment.status,
+        createdAt: new Date()
+      };
+      
+      if (!this.assessments[String(courseId)]) {
+        this.assessments[String(courseId)] = [];
+      }
+      this.assessments[String(courseId)].push(formatted);
+      return formatted;
+    } catch (error) {
+      console.error('Error adding assessment:', error);
+      throw error;
     }
-    return false;
   }
 
-  // ===== CALCULATION METHODS =====
+  async updateAssessment(courseId, assessmentId, assessmentData) {
+    try {
+      const response = await window.fetchWithAuth(`/api/student/assessments/${assessmentId}`, {
+        method: 'PUT',
+        body: JSON.stringify(assessmentData)
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to update assessment');
+      }
+      
+      const updated = await response.json();
+      const assessment = this.getAssessmentById(courseId, assessmentId);
+      if (assessment) {
+        Object.assign(assessment, {
+          earnedMarks: updated.earnedMarks,
+          status: updated.status,
+          title: updated.title,
+          type: updated.type,
+          description: updated.description,
+          dueDate: new Date(updated.dueDate),
+          weight: updated.weight,
+          totalMarks: updated.totalMarks
+        });
+      }
+      return assessment;
+    } catch (error) {
+      console.error('Error updating assessment:', error);
+      throw error;
+    }
+  }
+
+  async deleteAssessment(courseId, assessmentId) {
+    try {
+      const response = await window.fetchWithAuth(`/api/student/assessments/${assessmentId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to delete assessment');
+      }
+      
+      const assessments = this.assessments[String(courseId)];
+      if (assessments) {
+        const index = assessments.findIndex(a => a.id === String(assessmentId));
+        if (index > -1) {
+          assessments.splice(index, 1);
+        }
+      }
+      return true;
+    } catch (error) {
+      console.error('Error deleting assessment:', error);
+      throw error;
+    }
+  }
+
+  // ===== CALCULATION METHODS (local computation for speed) =====
   calculateCourseAverage(courseId) {
     const assessments = this.getAssessmentsByCourse(courseId);
     let totalWeight = 0;
@@ -359,6 +309,14 @@ class DataStore {
     });
 
     return upcoming.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  }
+
+  // Reset for logout
+  reset() {
+    this.courses = [];
+    this.assessments = {};
+    this.currentCourseId = null;
+    this._initialized = false;
   }
 }
 

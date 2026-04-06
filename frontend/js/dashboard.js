@@ -1,6 +1,6 @@
 // dashboard.js — Deliverable 2
 // Uses window.fetchWithAuth() from Person 1's auth.js (auto-attaches JWT token)
-// Falls back to dataStore mock data if no token or API fails
+// Falls back to dataStore for local state if no API endpoint
 
 async function renderDashboard() {
     const courseGrid = document.querySelector('#dashboardPage .course-grid');
@@ -11,36 +11,37 @@ async function renderDashboard() {
     const token = localStorage.getItem('jwt_token');
 
     if (!token) {
-        // No real login yet — use mock data so UI still works
-        renderDashboardFromStore(courseGrid, assessmentList);
+        // No real login yet — show empty state
+        courseGrid.innerHTML = `
+            <div class="empty-state">
+                <h4>Please log in</h4>
+                <p>Log in to view your courses and assessments.</p>
+            </div>
+        `;
+        assessmentList.innerHTML = `
+            <li class="assessment-item">
+                <div>
+                    <h4>No upcoming assessments</h4>
+                    <p class="assessment-meta">Log in to view your assessments.</p>
+                </div>
+            </li>
+        `;
         return;
     }
 
     courseGrid.innerHTML = '<div class="empty-state"><p>Loading courses...</p></div>';
     assessmentList.innerHTML = '<li class="assessment-item"><div><h4>Loading...</h4></div></li>';
 
-    try {
-        // window.fetchWithAuth is defined by Person 1 in auth.js
-        const response = await window.fetchWithAuth('/api/dashboard');
-
-        if (!response.ok) {
-            renderDashboardFromStore(courseGrid, assessmentList);
-            return;
-        }
-
-        const data = await response.json();
-        renderDashboardCourses(courseGrid, data.courses);
-        renderUpcomingAssessments(assessmentList, data.upcoming);
-
-    } catch (error) {
-        console.warn('Dashboard API unavailable, using mock data:', error.message);
-        renderDashboardFromStore(courseGrid, assessmentList);
-    }
+    // Initialize dataStore from API
+    await dataStore.initialize();
+    
+    // Use local dataStore data (which is now API-backed)
+    renderDashboardFromStore(courseGrid, assessmentList);
 }
 
 
-// ── Fallback: original D1 dataStore behaviour ─────────────────────────────────
-function renderDashboardFromStore(courseGrid, assessmentList) {
+// ── Render from dataStore (now API-backed) ─────────────────────────────────
+async function renderDashboardFromStore(courseGrid, assessmentList) {
     const courses = dataStore.getCourses();
 
     if (courses.length === 0) {
