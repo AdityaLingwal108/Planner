@@ -51,7 +51,12 @@ app.use('/api/admin', adminRoutes);
 const studentRoutes = require('./routes/studentRoutes');
 app.use('/api/student', studentRoutes);
 
-// SPA fallback - serve index.html for any unmatched routes
+// Handle 404 for API routes - return JSON error instead of HTML
+app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found.' });
+});
+
+// SPA fallback - serve index.html for any unmatched non-API routes
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });

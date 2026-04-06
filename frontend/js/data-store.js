@@ -1,6 +1,15 @@
 // Data Store - API-backed application state management
 // Uses JWT authentication via window.fetchWithAuth()
 
+// Helper function to safely parse JSON response
+async function parseJsonResponse(response) {
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    throw new Error('Server returned invalid response. Please try again.');
+  }
+  return response.json();
+}
+
 class DataStore {
   constructor() {
     this.courses = [];
@@ -32,7 +41,7 @@ class DataStore {
         console.warn(`Failed to fetch courses from API: ${response.status} ${response.statusText}`);
         return;
       }
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
       this.courses = data.map(c => ({
         id: String(c.id),
         code: c.code,
@@ -85,11 +94,11 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to create course');
       }
       
-      const newCourse = await response.json();
+      const newCourse = await parseJsonResponse(response);
       const formattedCourse = {
         id: String(newCourse.id),
         code: newCourse.code,
@@ -118,11 +127,11 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to update course');
       }
       
-      const updatedCourse = await response.json();
+      const updatedCourse = await parseJsonResponse(response);
       const course = this.getCourseById(courseId);
       if (course) {
         Object.assign(course, {
@@ -148,7 +157,7 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to delete course');
       }
       
@@ -182,11 +191,11 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to create assessment');
       }
       
-      const newAssessment = await response.json();
+      const newAssessment = await parseJsonResponse(response);
       const formatted = {
         id: String(newAssessment.id),
         courseId: String(courseId),
@@ -220,11 +229,11 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to update assessment');
       }
       
-      const updated = await response.json();
+      const updated = await parseJsonResponse(response);
       const assessment = this.getAssessmentById(courseId, assessmentId);
       if (assessment) {
         Object.assign(assessment, {
@@ -252,7 +261,7 @@ class DataStore {
       });
       
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.error || 'Failed to delete assessment');
       }
       
