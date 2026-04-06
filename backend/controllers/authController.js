@@ -2,10 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-<<<<<<< HEAD
-=======
 // Written by Person 1 — do not edit
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 exports.register = async (req, res) => {
@@ -22,10 +19,6 @@ exports.register = async (req, res) => {
             return res.status(400).json({ error: 'Password must be at least 6 characters.' });
         }
 
-<<<<<<< HEAD
-        // SQL Update: Use 'where' clause
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ error: 'Email is already registered.' });
@@ -34,10 +27,6 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-<<<<<<< HEAD
-        // SQL Update: Use .create()
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
         await User.create({
             name,
             email,
@@ -59,10 +48,6 @@ exports.login = async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required.' });
         }
 
-<<<<<<< HEAD
-        // SQL Update: Use 'where' clause
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
         const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials.' });
@@ -74,11 +59,7 @@ exports.login = async (req, res) => {
         }
 
         const token = jwt.sign(
-<<<<<<< HEAD
-            { id: user.id, role: user.role }, // SQL uses 'id', not '_id'
-=======
             { id: user.id, role: user.role },
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );

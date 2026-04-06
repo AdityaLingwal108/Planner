@@ -202,23 +202,16 @@ function toggleTheme() {
   document.body.className = `${newTheme}-mode`;
   saveToLocalStorage('theme', newTheme);
   updateThemeButton(newTheme);
-<<<<<<< HEAD
-=======
 
   if (typeof renderDashboard === 'function') {
     renderDashboard();
   }
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
 }
 
 function updateThemeButton(theme) {
   const themeButton = document.getElementById('themeToggle');
   if (themeButton) {
-<<<<<<< HEAD
     themeButton.textContent = theme === 'dark' ? '☀️' : '🌙';
-=======
-    themeButton.textContent = theme === 'dark' ? ' ☀️ ' : ' 🌙 ';
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
   }
 }
 

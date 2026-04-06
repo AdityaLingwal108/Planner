@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-// Dashboard Logic
-
-function renderDashboard() {
-    const courseGrid = document.querySelector('#dashboardPage .course-grid');
-    const assessmentList = document.querySelector('#dashboardPage .assessment-list');
-
-    if (!courseGrid || !assessmentList) return;
-
-    // 1. Render Dynamic Courses
-    const courses = dataStore.getCourses();
-
-    if (courses.length === 0) {
-        courseGrid.innerHTML = '<div class="empty-state"><p>No courses added yet.</p></div>';
-    } else {
-=======
 // dashboard.js — Deliverable 2
 // Uses window.fetchWithAuth() from Person 1's auth.js (auto-attaches JWT token)
 // Falls back to dataStore mock data if no token or API fails
@@ -88,18 +72,12 @@ function renderDashboardFromStore(courseGrid, assessmentList) {
             chartSection.style.display = 'block';
         }
 
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
         courseGrid.innerHTML = courses.map(course => {
             const avg = dataStore.calculateCourseAverage(course.id);
             const completed = dataStore.getCompletedAssessments(course.id);
             const total = dataStore.getTotalAssessments(course.id);
-<<<<<<< HEAD
-
-            // Determine badge status
-=======
             const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
 
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
             let badgeClass = 'badge-good';
             let badgeText = 'On track';
             if (avg < 60 && total > 0) {
@@ -119,10 +97,6 @@ function renderDashboardFromStore(courseGrid, assessmentList) {
                         </div>
                         <span class="badge ${badgeClass}">${badgeText}</span>
                     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
                     <div class="course-stats">
                         <div class="stat">
                             <span class="label">Current average</span>
@@ -133,23 +107,6 @@ function renderDashboardFromStore(courseGrid, assessmentList) {
                             <span class="value">${completed} / ${total}</span>
                         </div>
                     </div>
-<<<<<<< HEAD
-
-                    <div class="progress">
-                        <div class="progress-bar" style="width: ${avg}%;"></div>
-                    </div>
-                    <p class="progress-text">Progress: ${avg}%</p>
-                </article>
-            `;
-        }).join('');
-    }
-
-    // 2. Render Dynamic Upcoming Assessments (Next 30 days)
-    const upcoming = dataStore.getUpcomingAssessments(30);
-
-    if (upcoming.length === 0) {
-        assessmentList.innerHTML = '<li class="assessment-item"><div><h4>No upcoming assessments</h4><p class="assessment-meta">You are all caught up!</p></div></li>';
-=======
                     <div class="progress">
                         <div class="progress-bar" style="width: ${progress}%;"></div>
                     </div>
@@ -170,15 +127,10 @@ function renderDashboardFromStore(courseGrid, assessmentList) {
                     <p class="assessment-meta">You are all caught up!</p>
                 </div>
             </li>`;
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
     } else {
         assessmentList.innerHTML = upcoming.map(item => {
             const course = dataStore.getCourseById(item.courseId);
             const dueDate = new Date(item.dueDate).toLocaleDateString();
-<<<<<<< HEAD
-
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
             return `
                 <li class="assessment-item">
                     <div>
@@ -190,8 +142,6 @@ function renderDashboardFromStore(courseGrid, assessmentList) {
             `;
         }).join('');
     }
-<<<<<<< HEAD
-=======
 }
 // ── API-powered renderers (active once real login works) ──────────────────────
 function renderDashboardCourses(courseGrid, courses) {
@@ -452,5 +402,4 @@ function renderChartFromApi(courses) {
             }
         }
     });
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
 }

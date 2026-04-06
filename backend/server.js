@@ -13,18 +13,6 @@ app.use(express.json());
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-<<<<<<< HEAD
-// Sync SQL Database
-sequelize.sync()
-    .then(() => console.log('Connected to SQLite Database & Tables Synced'))
-    .catch((err) => console.error('Database sync error:', err));
-
-const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-=======
 // Import models
 const User = require('./models/User');
 const Course = require('./models/Course');
@@ -56,6 +44,7 @@ app.use('/api/adminauth', adminAuthRoutes);
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
 
+// SPA fallback - serve index.html for any unmatched routes
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
@@ -63,4 +52,3 @@ app.use((req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
->>>>>>> 3b783fc94735420146303896b04e722020dc791c

@@ -1,24 +1,10 @@
 {
-<<<<<<< HEAD
-  "name": "website",
-  "version": "1.0.0",
-  "description": "��#\u0000 \u0000P\u0000l\u0000a\u0000n\u0000n\u0000e\u0000r\u0000\r\u0000 \u0000",
-  "main": "index.js",
-=======
   "name": "smart-course-companion",
   "version": "1.0.0",
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js"
   },
-<<<<<<< HEAD
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-=======
->>>>>>> 3b783fc94735420146303896b04e722020dc791c
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
